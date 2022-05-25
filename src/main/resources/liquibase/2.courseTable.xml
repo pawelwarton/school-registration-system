@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+
+    <changeSet author="java" id="2">
+        <createTable
+                tableName="course">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_of_places_for_the_course" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="number_of_actual_students" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet author="java" id="4">
+        <insert
+                tableName="course">
+            <column name="name" value="Bazy Danych"/>
+            <column name="number_of_places_for_the_course" value="50"/>
+            <column name="number_of_actual_students" value="0"/>
+        </insert>
+        <insert
+                tableName="course">
+            <column name="name" value="Bezpieczenstwo systemow"/>
+            <column name="number_of_places_for_the_course" value="50"/>
+            <column name="number_of_actual_students" value="0"/>
+        </insert>
+        <insert
+                tableName="course">
+            <column name="name" value="Biologia i chemia"/>
+            <column name="number_of_places_for_the_course" value="50"/>
+            <column name="number_of_actual_students" value="0"/>
+        </insert>
+        <insert
+                tableName="course">
+            <column name="name" value="Cyberbezpieczenstwo"/>
+            <column name="number_of_places_for_the_course" value="50"/>
+            <column name="number_of_actual_students" value="0"/>
+        </insert>
+        <insert
+                tableName="course">
+            <column name="name" value="Edukacja medialna"/>
+            <column name="number_of_places_for_the_course" value="50"/>
+            <column name="number_of_actual_students" value="0"/>
+        </insert>
+        <insert
+                tableName="course">
+            <column name="name" value="Fizyka"/>
+            <column name="number_of_places_for_the_course" value="50"/>
+            <column name="number_of_actual_students" value="0"/>
+        </insert>
+        <insert
+                tableName="course">
+            <column name="name" value="Grafika"/>
+            <column name="number_of_places_for_the_course" value="50"/>
+            <column name="number_of_actual_students" value="0"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

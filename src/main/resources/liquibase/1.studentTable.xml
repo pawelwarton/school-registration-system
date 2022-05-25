@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+    <changeSet author="java" id="1">
+        <createTable
+                tableName="student">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_number_of_courses" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="numer_of_actual_courses" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet author="java" id="3">
+        <insert
+                tableName="student">
+            <column name="name" value="Adam"/>
+            <column name="surname" value="Malysz"/>
+            <column name="role" value="ROLE_STUDENT"/>
+            <column name="username" value="malysz"/>
+            <column name="password" value="$2a$04$EzEkfWILJtVA3lJo3KZh/.nDT85qm5Krd18mWnrn3SBAt0I/1SX3m"/>
+            <column name="email" value="malysz@gmail.com"/>
+            <column name="max_number_of_courses" value="5"/>
+            <column name="numer_of_actual_courses" value="0"/>
+            <column name="version" value="0"/>
+        </insert>
+        <insert
+                tableName="student">
+            <column name="name" value="Dawid"/>
+            <column name="surname" value="Kowalski"/>
+            <column name="role" value="ROLE_STUDENT"/>
+            <column name="username" value="kowalski"/>
+            <column name="password" value="$2a$04$PprTho7iPUpdM5Jd3lGeauI6sX3zEqi38uX4cakY8hkUFNw.qhn.C"/>
+            <column name="email" value="kowalski@gmail.com"/>
+            <column name="max_number_of_courses" value="5"/>
+            <column name="numer_of_actual_courses" value="0"/>
+            <column name="version" value="0"/>
+        </insert>
+        <insert
+                tableName="student">
+            <column name="name" value="Anna"/>
+            <column name="surname" value="Mucha"/>
+            <column name="role" value="ROLE_STUDENT"/>
+            <column name="username" value="mucha"/>
+            <column name="password" value="$2a$04$GgO0fOelCTsDgTKlyVf79OPKp455PC.AWhq6rh5VPcG.xo1g61gyq"/>
+            <column name="email" value="mucha@gmail.com"/>
+            <column name="max_number_of_courses" value="5"/>
+            <column name="numer_of_actual_courses" value="0"/>
+            <column name="version" value="0"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
