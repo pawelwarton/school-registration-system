@@ -50,4 +50,8 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findAll();
     }
 
+    @Override
+    public List<Student> findStudentsWithoutCourses(int number) {
+        return studentRepository.findByNumerOfActualCourses(number);
+    }
 }

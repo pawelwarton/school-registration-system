@@ -52,4 +52,10 @@ public class StudentController {
         return new ResponseEntity<>(students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList(), HttpStatus.OK);
     }
 
+    @GetMapping("/studentsWithoutCourses")
+    public ResponseEntity<List<StudentDto>> getStudentsWithoutCourses() {
+        List<Student> students = studentService.findStudentsWithoutCourses(0);
+        return new ResponseEntity<>(students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList(), HttpStatus.OK);
+    }
+
 }

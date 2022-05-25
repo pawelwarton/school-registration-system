@@ -21,4 +21,5 @@ public interface StudentService {
 
     List<Student> findAll();
 
+    List<Student> findStudentsWithoutCourses(int number);
 }

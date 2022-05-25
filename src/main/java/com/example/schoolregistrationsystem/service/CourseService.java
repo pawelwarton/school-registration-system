@@ -20,4 +20,6 @@ public interface CourseService {
 
     void enrollStudentToCourse(Student student, long courseId);
 
+    List<Course> findCoursesWithoutStudents(int number);
+
 }

@@ -21,7 +21,7 @@ public class Course {
     private String name;
     private int numberOfPlacesForTheCourse;
     private int numberOfActualStudents;
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "student_enrolled",
             joinColumns = @JoinColumn(name = "student_id"),

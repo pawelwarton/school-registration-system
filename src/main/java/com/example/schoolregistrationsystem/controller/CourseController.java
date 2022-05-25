@@ -56,4 +56,10 @@ public class CourseController {
         courseService.enrollStudentToCourse(student, courseId);
         return HttpStatus.OK;
     }
+
+    @GetMapping("/coursesWithoutStudents")
+    public ResponseEntity<List<CourseDto>> getAllCoursesWithoutStudents(){
+        List<Course> courses = courseService.findCoursesWithoutStudents(0);
+        return new ResponseEntity<>(courses.stream().map(course -> modelMapper.map(course, CourseDto.class)).toList(), HttpStatus.OK);
+    }
 }

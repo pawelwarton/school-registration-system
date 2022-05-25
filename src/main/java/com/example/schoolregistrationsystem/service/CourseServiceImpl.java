@@ -60,11 +60,16 @@ public class CourseServiceImpl implements CourseService{
             throw new ApplicationException(ExceptionDto.STUDENT_ALREADY_ENROLLED);
         } else if(course.getNumberOfActualStudents() == course.getNumberOfPlacesForTheCourse()) {
             throw new ApplicationException(ExceptionDto.NO_AVAILABLE_PLACE);
-        } else if(enrollStudent.getNumerOfActualCourses() == 1) {
+        } else if(enrollStudent.getNumerOfActualCourses() == enrollStudent.getMaxNumberOfCourses()) {
             throw new ApplicationException(ExceptionDto.COURSE_LIMIT_REACHED);
         }
         course.getStudents().add(enrollStudent);
         course.setNumberOfActualStudents(course.getNumberOfActualStudents() + 1);
         enrollStudent.setNumerOfActualCourses(enrollStudent.getNumerOfActualCourses() +1);
+    }
+
+    @Override
+    public List<Course> findCoursesWithoutStudents(int number) {
+        return courseRepository.findByNumberOfActualStudentsLessThanEqual(number);
     }
 }

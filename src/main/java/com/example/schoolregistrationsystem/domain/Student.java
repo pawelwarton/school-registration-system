@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -32,11 +31,10 @@ public class Student implements UserDetails {
     private String password;
     private String email;
     private int maxNumberOfCourses;
-    @Max(value = 1, message = "COURSE_LIMIT_REACHED")
     private int numerOfActualCourses;
     @Version
     private int version;
-    @ManyToMany(mappedBy = "students", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "students",fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Course> courses = new HashSet<>();
 
     @Override

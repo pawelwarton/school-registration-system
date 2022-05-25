@@ -1,6 +1,8 @@
 package com.example.schoolregistrationsystem.model.command;
 
 import com.example.schoolregistrationsystem.model.Role;
+import com.example.schoolregistrationsystem.validation.annotation.UniqueEmail;
+import com.example.schoolregistrationsystem.validation.annotation.UniqueUsername;
 import lombok.Builder;
 import lombok.Value;
 
@@ -18,10 +20,12 @@ public class CreateStudentCommand {
     @Enumerated(EnumType.STRING)
     private Role role;
     @NotEmpty
+    @UniqueUsername
     private String username;
     @NotEmpty
     private String password;
     @NotEmpty
+    @UniqueEmail
     private String email;
     private int maxNumberOfCourses;
 }
