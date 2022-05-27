@@ -41,7 +41,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void deleteById(long id) {
-        final Student student = studentRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.STUDENT_NOT_FOUND));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.STUDENT_NOT_FOUND));
         studentRepository.deleteById(student.getId());
     }
 
@@ -51,7 +51,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findStudentsWithoutCourses(int number) {
-        return studentRepository.findByNumerOfActualCourses(number);
+    public List<Student> findAllStudentsWithCourse(long courseId) {
+        return studentRepository.findAllStudentWithCourse(courseId);
+    }
+
+    @Override
+    public List<Student> findStudentsWhereCoursesAreNull() {
+        return studentRepository.findStudentsByCoursesNull();
     }
 }

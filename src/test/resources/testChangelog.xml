@@ -8,9 +8,8 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       http://www.liquibase.org/xml/ns/pro
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
 
-    <include file="liquibase/1.studentTable.xml" relativeToChangelogFile="true"/>
-    <include file="liquibase/2.courseTable.xml" relativeToChangelogFile="true"/>
-<!--    <include file="liquibase/3.studentCourseTable.xml" relativeToChangelogFile="true"/>-->
+    <include file="liquibase/1.testStudentTable.xml" relativeToChangelogFile="true"/>
+    <include file="liquibase/testCourseTable.xml" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>

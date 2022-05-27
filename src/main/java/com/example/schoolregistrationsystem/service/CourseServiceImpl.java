@@ -15,10 +15,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CourseServiceImpl implements CourseService{
+public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
 
     @Override
     public Course createCourse(Course course) {
@@ -28,7 +28,7 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course editCourse(long id, Course course) {
-        final Course editCourse = courseRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.COURSE_NOT_FOUND));
+        Course editCourse = courseRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.COURSE_NOT_FOUND));
         editCourse.setName(course.getName());
         editCourse.setNumberOfPlacesForTheCourse(course.getNumberOfPlacesForTheCourse());
         return courseRepository.saveAndFlush(editCourse);
@@ -36,12 +36,12 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course findById(long id) {
-       return courseRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.COURSE_NOT_FOUND));
+        return courseRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.COURSE_NOT_FOUND));
     }
 
     @Override
     public void deleteById(long id) {
-        final Course course = courseRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.COURSE_NOT_FOUND));
+        Course course = courseRepository.findById(id).orElseThrow(() -> new ApplicationException(ExceptionDto.COURSE_NOT_FOUND));
         courseRepository.deleteById(course.getId());
     }
 
@@ -54,22 +54,43 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void enrollStudentToCourse(Student student, long courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new ApplicationException(ExceptionDto.COURSE_NOT_FOUND));
-        Student enrollStudent = studentRepository.findById(student.getId()).orElseThrow(() -> new ApplicationException(ExceptionDto.STUDENT_NOT_FOUND));
+        Student enrollStudent = studentService.findById(student.getId());
 
-        if(course.getStudents().contains(enrollStudent)) {
+        if (course.getStudents().contains(enrollStudent)) {
             throw new ApplicationException(ExceptionDto.STUDENT_ALREADY_ENROLLED);
-        } else if(course.getNumberOfActualStudents() == course.getNumberOfPlacesForTheCourse()) {
+        } else if (course.getNumberOfActualStudents() == course.getNumberOfPlacesForTheCourse()) {
             throw new ApplicationException(ExceptionDto.NO_AVAILABLE_PLACE);
-        } else if(enrollStudent.getNumerOfActualCourses() == enrollStudent.getMaxNumberOfCourses()) {
+        } else if (enrollStudent.getNumerOfActualCourses() == enrollStudent.getMaxNumberOfCourses()) {
             throw new ApplicationException(ExceptionDto.COURSE_LIMIT_REACHED);
         }
         course.getStudents().add(enrollStudent);
         course.setNumberOfActualStudents(course.getNumberOfActualStudents() + 1);
-        enrollStudent.setNumerOfActualCourses(enrollStudent.getNumerOfActualCourses() +1);
+        enrollStudent.setNumerOfActualCourses(enrollStudent.getNumerOfActualCourses() + 1);
     }
 
     @Override
-    public List<Course> findCoursesWithoutStudents(int number) {
-        return courseRepository.findByNumberOfActualStudentsLessThanEqual(number);
+    public List<Course> findAllStudentCourses(long studentId) {
+        return courseRepository.findAllCoursesWithStudent(studentId);
+    }
+
+    @Override
+    public List<Course> findCoursesWithoutStudents() {
+        return courseRepository.findCoursesByStudentsNull();
+    }
+
+    @Override
+    public void removeAll(List<Course> courses) {
+        for (Course course : courses) {
+            course.getStudents().clear();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void removeStudentFromCourse(long courseId, long studentId) {
+        Course course = findById(courseId);
+        Student student = studentService.findById(studentId);
+
+        course.getStudents().remove(student);
     }
 }

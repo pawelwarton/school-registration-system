@@ -4,6 +4,7 @@ import com.example.schoolregistrationsystem.domain.Student;
 import com.example.schoolregistrationsystem.model.command.CreateStudentCommand;
 import com.example.schoolregistrationsystem.model.command.EditStudentCommand;
 import com.example.schoolregistrationsystem.model.dto.StudentDto;
+import com.example.schoolregistrationsystem.model.dto.StudentWithCourseDto;
 import com.example.schoolregistrationsystem.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,13 +25,13 @@ public class StudentController {
 
     @PostMapping("/create")
     public ResponseEntity<StudentDto> createStudent(@RequestBody @Valid CreateStudentCommand studentCommand) {
-        final Student student = modelMapper.map(studentCommand, Student.class);
+        Student student = modelMapper.map(studentCommand, Student.class);
         return new ResponseEntity<>(modelMapper.map(studentService.createStudent(student), StudentDto.class), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/edit")
     public ResponseEntity<StudentDto> editStudent(@PathVariable("id") long id, @RequestBody EditStudentCommand studentCommand) {
-        final Student student = studentService.findById(id);
+        Student student = studentService.findById(id);
         return ResponseEntity.ok(modelMapper.map(studentService.editStudent(student, studentCommand), StudentDto.class));
     }
 
@@ -42,7 +43,7 @@ public class StudentController {
 
     @GetMapping("/{id}/find")
     public ResponseEntity<StudentDto> findStudentById(@PathVariable("id") long id) {
-        final Student student = studentService.findById(id);
+        Student student = studentService.findById(id);
         return new ResponseEntity<>(modelMapper.map(student, StudentDto.class), HttpStatus.OK);
     }
 
@@ -52,9 +53,15 @@ public class StudentController {
         return new ResponseEntity<>(students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/getStudentsWithCourse")
+    public ResponseEntity<List<StudentDto>> findAllStudentsWithCourse(@PathVariable("id") long id) {
+        List<Student> students = studentService.findAllStudentsWithCourse(id);
+        return new ResponseEntity<>(students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList(), HttpStatus.OK);
+    }
+
     @GetMapping("/studentsWithoutCourses")
-    public ResponseEntity<List<StudentDto>> getStudentsWithoutCourses() {
-        List<Student> students = studentService.findStudentsWithoutCourses(0);
+    public ResponseEntity<List<StudentDto>> findStudentsWithoutCourse() {
+        List<Student> students = studentService.findStudentsWhereCoursesAreNull();
         return new ResponseEntity<>(students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList(), HttpStatus.OK);
     }
 

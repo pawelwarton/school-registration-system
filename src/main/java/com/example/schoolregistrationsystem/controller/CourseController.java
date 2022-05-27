@@ -24,13 +24,13 @@ public class CourseController {
 
     @PostMapping("/create")
     public ResponseEntity<CourseDto> createCourse(@RequestBody CreateCourseCommand courseCommand) {
-        final Course course = modelMapper.map(courseCommand, Course.class);
+        Course course = modelMapper.map(courseCommand, Course.class);
         return new ResponseEntity<>(modelMapper.map(courseService.createCourse(course), CourseDto.class), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}/find")
     public ResponseEntity<CourseDto> findCourseById(@PathVariable("id") long id) {
-        final Course course = courseService.findById(id);
+        Course course = courseService.findById(id);
         return new ResponseEntity<>(modelMapper.map(course, CourseDto.class), HttpStatus.OK);
     }
 
@@ -57,9 +57,21 @@ public class CourseController {
         return HttpStatus.OK;
     }
 
-    @GetMapping("/coursesWithoutStudents")
-    public ResponseEntity<List<CourseDto>> getAllCoursesWithoutStudents(){
-        List<Course> courses = courseService.findCoursesWithoutStudents(0);
+    @GetMapping("/{id}/student")
+    public ResponseEntity<List<CourseDto>> findAllCoursesWithStudent(@PathVariable("id") long id) {
+        List<Course> courses = courseService.findAllStudentCourses(id);
         return new ResponseEntity<>(courses.stream().map(course -> modelMapper.map(course, CourseDto.class)).toList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/coursesWithoutStudents")
+    public ResponseEntity<List<CourseDto>> findAllCoursesWithoutStudents() {
+        List<Course> courses = courseService.findCoursesWithoutStudents();
+        return new ResponseEntity<>(courses.stream().map(course -> modelMapper.map(course, CourseDto.class)).toList(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{courseId}/{studentId}")
+    public HttpStatus removeStudentFromCourse(@PathVariable("courseId") long courseId, @PathVariable("studentId") long studentId) {
+        courseService.removeStudentFromCourse(courseId, studentId);
+        return HttpStatus.OK;
     }
 }

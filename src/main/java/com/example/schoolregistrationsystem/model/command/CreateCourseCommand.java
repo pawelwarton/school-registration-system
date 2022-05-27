@@ -1,16 +1,18 @@
 package com.example.schoolregistrationsystem.model.command;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CreateCourseCommand {
     @NotEmpty
     private String name;
     @Size(max = 50)
-    private int maximumNumberOfStudents;
+    private int numberOfPlacesForTheCourse;
 }

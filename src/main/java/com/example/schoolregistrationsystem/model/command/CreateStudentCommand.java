@@ -3,14 +3,16 @@ package com.example.schoolregistrationsystem.model.command;
 import com.example.schoolregistrationsystem.model.Role;
 import com.example.schoolregistrationsystem.validation.annotation.UniqueEmail;
 import com.example.schoolregistrationsystem.validation.annotation.UniqueUsername;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CreateStudentCommand {
     @NotEmpty

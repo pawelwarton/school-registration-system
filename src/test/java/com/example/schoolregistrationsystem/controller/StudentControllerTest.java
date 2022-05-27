@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -43,9 +42,11 @@ class StudentControllerTest {
     @Autowired
     private StudentRepository studentRepository;
 
+    private Student s1;
+
     @BeforeEach
     void setUp() {
-        Student newStudent = Student.builder()
+        s1 = Student.builder()
                 .id(1L)
                 .name("Adam")
                 .surname("Malysz")
@@ -57,7 +58,7 @@ class StudentControllerTest {
                 .numerOfActualCourses(0)
                 .build();
 
-        Authentication auth = new UsernamePasswordAuthenticationToken(newStudent, null);
+        Authentication auth = new UsernamePasswordAuthenticationToken(s1, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
@@ -86,6 +87,8 @@ class StudentControllerTest {
         Student student = studentRepository.findByEmail(studentCommand.getEmail());
 
         assertEquals("nowak", student.getUsername());
+
+        studentRepository.deleteById(student.getId());
     }
 
     @Test
@@ -117,6 +120,8 @@ class StudentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(editRequest))
                 .andExpect(status().isOk());
+
+        studentRepository.deleteById(student.getId());
     }
 
     @Test
@@ -150,11 +155,9 @@ class StudentControllerTest {
 
     @Test
     void shouldFindStudentById() throws Exception {
-        Student student = studentRepository.findByEmail("kowalski@gmail.com");
-
-        postman.perform(get("/student/" + student.getId() + "/find"))
+        postman.perform(get("/student/" + s1.getId() + "/find"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Dawid"));
+                .andExpect(jsonPath("$.name").value("Adam"));
     }
 
     @Test
@@ -171,28 +174,24 @@ class StudentControllerTest {
         Student s1 = studentRepository.findByEmail("malysz@gmail.com");
         Student s2 = studentRepository.findByEmail("kowalski@gmail.com");
         Student s3 = studentRepository.findByEmail("mucha@gmail.com");
-        Student s4 = studentRepository.findByEmail("nowak@gmail.com");
 
         List<StudentDto> expectedResponse = Arrays.asList(
                 new StudentDto(s1.getId(), s1.getName(), s1.getSurname(), s1.getEmail(), s1.getNumerOfActualCourses()),
                 new StudentDto(s2.getId(), s2.getName(), s2.getSurname(), s2.getEmail(), s2.getNumerOfActualCourses()),
-                new StudentDto(s3.getId(), s3.getName(), s3.getSurname(), s3.getEmail(), s3.getNumerOfActualCourses()),
-                new StudentDto(s4.getId(), s4.getName(), s4.getSurname(), s4.getEmail(), s4.getNumerOfActualCourses())
+                new StudentDto(s3.getId(), s3.getName(), s3.getSurname(), s3.getEmail(), s3.getNumerOfActualCourses())
         );
 
         studentResponse.sort(Comparator.comparing(StudentDto::getName));
         expectedResponse.sort(Comparator.comparing(StudentDto::getName));
 
         assertEquals(expectedResponse, studentResponse);
-        assertEquals(4, studentResponse.size());
+        assertEquals(3, studentResponse.size());
     }
 
-    @WithMockUser(username = "pacholek", password = "pacholek")
     @Test
-    void shouldGetStudentsWithoutCourses() throws Exception {
+    void shouldGetStudentsWithoutCourse() throws Exception {
         postman.perform(put("/course/1/enroll"))
                 .andExpect(status().isOk());
-
 
         String responseJson = postman.perform(get("/student/studentsWithoutCourses"))
                 .andExpect(status().isOk())
@@ -203,7 +202,6 @@ class StudentControllerTest {
         List<StudentDto> studentResponse = objectMapper.readValue(responseJson, new TypeReference<>() {
         });
 
-        studentResponse.forEach(System.out::println);
+        assertEquals(2, studentResponse.size());
     }
-
 }

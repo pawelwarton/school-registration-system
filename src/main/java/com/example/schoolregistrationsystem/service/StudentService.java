@@ -21,5 +21,8 @@ public interface StudentService {
 
     List<Student> findAll();
 
-    List<Student> findStudentsWithoutCourses(int number);
+    List<Student> findAllStudentsWithCourse(long courseId);
+
+    List<Student> findStudentsWhereCoursesAreNull();
+
 }
